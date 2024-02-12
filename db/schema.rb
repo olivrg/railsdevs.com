@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_06_182219) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_19_080300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -149,6 +149,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_182219) do
     t.datetime "profile_updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.integer "search_score", default: 0, null: false
     t.integer "conversations_count", default: 0, null: false
+    t.string "gitlab"
     t.index ["public_profile_key"], name: "index_developers_on_public_profile_key", unique: true
     t.index ["textsearchable_index_col"], name: "textsearchable_index", using: :gin
     t.index ["user_id"], name: "index_developers_on_user_id"
@@ -165,17 +166,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_182219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["developer_id"], name: "index_developers_celebration_package_requests_on_developer_id"
-  end
-
-  create_table "developers_external_profiles", force: :cascade do |t|
-    t.bigint "developer_id", null: false
-    t.string "site", null: false
-    t.jsonb "data", default: {}, null: false
-    t.string "error"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["developer_id", "site"], name: "index_developers_external_profiles_on_developer_id_and_site", unique: true
-    t.index ["developer_id"], name: "index_developers_external_profiles_on_developer_id"
   end
 
   create_table "hiring_agreements_signatures", force: :cascade do |t|
@@ -340,7 +330,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_182219) do
     t.string "owner_type"
     t.bigint "owner_id"
     t.string "processor", null: false
-    t.string "processor_id", precision: nil
+    t.string "processor_id"
     t.boolean "default"
     t.jsonb "data"
     t.datetime "deleted_at"
@@ -482,7 +472,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_182219) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "businesses_hiring_invoice_requests", "businesses"
   add_foreign_key "developers_celebration_package_requests", "developers"
-  add_foreign_key "developers_external_profiles", "developers"
   add_foreign_key "hiring_agreements_signatures", "hiring_agreements_terms"
   add_foreign_key "hiring_agreements_signatures", "users"
   add_foreign_key "notification_tokens", "users"
